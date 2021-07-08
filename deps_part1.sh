@@ -52,17 +52,15 @@ fi
 source ~/.zshrc
 
 commands_install=(
+    git 
+    hub 
+    watchman 
+    tree 
+    bat 
+    powerlevel10k 
+    antigen
     zsh-syntax-highlighting
-    go
-    android-platform-tools
-    htop
-    openjdk
-    redis
     pyenv
-    postgresql
-    sqlc
-    php
-    mysql
 )
 
 printf "\n"
@@ -79,23 +77,28 @@ do
     fi
 done
 
-java --version
-if [ $? -eq 0 ]; then
-    printf "\n${bold} Java setup successfull"
-else
-    `sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk`
-fi
+casks_install=(
+raycast brave-browser rectangle \
+discord zoom rocket appcleaner \
+qlcolorcode qlstephen quicklook-json \
+suspicious-package spotify slack hyper \
+firefox-developer-edition thinkorswim signal \
+visual-studio-code
+)
 
-# Installing heroku-cli
-printf "\n${bold} Heroku CLI\n"
-brew list heroku > /dev/null
-if [ $? -eq 0 ]; then
-    printf "heroku installed successfully\n"
-else
-    brew tap heroku/brew > /dev/null
-    brew install heroku
-    check_install_result "heroku"
-fi
+printf "\n"
+
+for j in $casks_install
+do
+    printf "${bold}Installing $j\n"
+    brew list $j > /dev/null
+    if [ $? -eq 0 ]; then
+        printf "$j already installed successfully\n\n"
+    else
+        brew install $j
+        check_install_result "$j"
+    fi
+done
 
 zsh node_deps.sh
 yarn --version
